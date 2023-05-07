@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Ask and Answer</title>
+    <style>
+        /* Add any custom styles for this page here */
+    </style>
+</head>
+<body>
+    
+    
+    <header style="background-color: rgba(255, 214, 221, 0.938)">
+        <img src="logo.jpg" alt="VirtualT Logo" height = "10%" width="10%">
+        <nav>
+          <ul>
+            <li><a href="home.html">Home</a></li>
+            <li>
+              <div class="dropdown">
+                <a href="#"><button class="dropbtn">Posts</button></a>
+                <div class="dropdown-content">
+                  <a href="CreatePost.html">Create a Post</a>
+                  <a href="#">Search Post</a>
+                </div>
+              </div>
+            </li>
+            <li><a href="questionBank.html">Question Bank</a></li>
+          </ul>
+        </nav>
+      </header>
+
+    <main style="display: flex; text-align: center; align-items: center;">
+<div>
+
+  <h1 style="text-align: center;">Question</h1>
+      <textarea style = "height: 10vw; width: 50vw;" id="question" class="form-control form-control-lg" name="question" rows="10" readonly></textarea><br><br>
+  
+      <label for="answer">Answer:</label>
+
+  
+            <textarea style = "height: fit-content; width: 50vw;" id="answer" class="form-control form-control-lg" name="answer" rows="10" readonly></textarea><br><br>
+
+            <label for="keywords">keywords:</label>
+            <textarea style = "height: fit-content; width: 50vw;" id="keywords" class="form-control form-control-lg" name="keywords" rows="2" readonly></textarea><br><br>
+
+            <!-- <input type="submit" class="btn btn-outline-primary btn-lg" value="Submit" > -->
+            <button class="btn btn-outline-primary btn-lg" onclick="editAnswers()">Add comments</button>
+        <!-- </form> -->
+    </div>
+    </main>
+</body>
+</html>
+
+
+
+
+
+<!-- JS -->
+<script src="https://unpkg.com/axios/dist/axios.min.js"></script>  
+<script>
+    window.onload = function() {
+        var x = sessionStorage.getItem("ques")
+        var y = sessionStorage.getItem("ans")
+        var name = sessionStorage.getItem("name")
+        document.getElementById('question').textContent = x + " ( " + name +" ) "
+        document.getElementById('answer').textContent = y
+        document.getElementById('keywords').textContent = sessionStorage.getItem("keywords")
+        console.log(x)
+    }
+  function getInitialResponse() {
+    const inputValue = document.getElementById("search-input").value;
+    console.log(inputValue);
+    const name = inputValue
+    const url = "http://localhost:5000/get_initial_response";
+    const data = { name: name };
+    console.log(data);
+
+    axios.post(url, data)
+    .then(response => {
+        console.log(response.data);
+    })
+    .catch(error => {
+        console.error(error);
+    });
+  }
+
+  function getKeywords(){
+    const inputValue = document.getElementById("question").value;
+    console.log(inputValue);
+    const name = inputValue
+    const url = "http://localhost:5000/get_keywords";
+    const data = { name: name };
+    console.log(data);
+
+    axios.post(url, data)
+    .then(response => {
+        console.log(response.data);
+        sessionStorage.setItem('keywords', response.data['message'])
+        document.getElementById('keywords').textContent = response.data['message'].join("  ")
+    })
+    .catch(error => {
+        console.error(error);
+    });
+  }
+
+  function editAnswers(){
+    document.getElementById('answer').removeAttribute('readOnly')
+  }
+</script>
+
+
+
+
+
+<!-- CSS -->
+<style>
+  /* Reset styles */
+  * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+  
+  html, body {
+    height: 100%;
+    width: 100%;
+    background-color: rgb(148, 191, 207);
+    justify-content: center;
+  }
+  
+  main {
+    display: flex;
+    justify-content: center;
+    height: 100%;
+    /*align-items: center;*/
+  }
+  
+  .search-box {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 2rem 0;
+    width: 100%;
+  }
+  
+  .search-box label {
+    font-size: 1.2rem;
+    margin-right: 1rem;
+  }
+  
+  .search-box input[type="text"] {
+    font-size: 1.2rem;
+    padding: 0.5rem;
+    border-radius: 4px;
+    border: 1px solid #ccc;
+    /*margin-right: 1rem;*/
+  }
+  
+  .button[type="submit"] {
+    font-size: 1.2rem;
+    padding: 0.5rem 1rem;
+    border-radius: 4px;
+border: none;
+background-color: rgb(84, 140, 168);
+color: #fff;
+cursor: pointer;
+transition: background-color 0.3s ease-in-out;
+}
+
+.button[type="submit"]:hover {
+background-color: rgb(65, 109, 131);
+}
+
+header {
+display: flex;
+justify-content: space-between;
+align-items: center;
+padding: 1rem;
+background-color: #fff;
+box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+}
+
+nav ul {
+display: flex;
+justify-content: space-between;
+align-items: center;
+}
+
+nav ul li {
+list-style: none;
+margin-right: 2rem;
+}
+
+nav ul li:last-child {
+margin-right: 0;
+}
+
+nav ul li a {
+text-decoration: none;
+color: #333;
+font-size: 1.2rem;
+font-weight: 500;
+transition: color 0.3s ease-in-out;
+}
+
+nav ul li a:hover {
+color: rgb(84, 140, 168);
+}
+
+.dropdown {
+position: relative;
+display: inline-block;
+}
+
+.dropdown-content {
+display: none;
+position: absolute;
+background-color: #fff;
+box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+z-index: 1;
+}
+
+.dropdown:hover .dropdown-content {
+display: block;
+}
+
+.dropdown-content a {
+color: #333;
+font-size: 1.2rem;
+padding: 0.5rem;
+text-decoration: none;
+display: block;
+}
+
+.dropdown-content a:hover {
+background-color: rgb(84, 140, 168);
+color: #fff;
+}
+
+.dropbtn {
+background-color: transparent;
+color: #333;
+font-size: 1.2rem;
+font-weight: 500;
+border: none;
+cursor: pointer;
+transition: color 0.3s ease-in-out;
+}
+
+.dropbtn:hover {
+color: rgb(84, 140, 168);
+}
+
+footer {
+background-color: #fff;
+box-shadow: 0px -5px 10px rgba(0, 0, 0, 0.1);
+display: flex;
+justify-content: center;
+align-items: center;
+height: 70px;
+}
+
+.footer-content {
+display: flex;
+justify-content: space-between;
+align-items: center;
+width: 90%;
+max-width: 1200px;
+margin: 0 auto;
+}
+
+.social-icons a {
+color: #333;
+font-size: 1.5rem;
+margin-right: 1rem;
+transition: color 0.3s ease-in-out;
+}
+
+.social-icons a:hover {
+color: rgb(84, 140, 168);
+}
+</style>
