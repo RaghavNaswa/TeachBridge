@@ -1,4 +1,6 @@
 # TeachBridge
+Have you ever opened 100 different tabs in your web browser to find solutions to a problem? As a developer we are sure that most of you must have done that. This leads to a cluttered computer and a mind. This project aims to solve that problem by making sure that quality answers are provided to a problem that are ranked according to their authenticity and relevancy.  
+
 TeachBridge is an AI-based virtual teaching assistant that acts as a bridge between online and in-person learning to help students navigate the transition smoothly. The goal of TeachBridge is to provide personalized support, feedback, and guidance to enhance the learning experience of students.
 
 ## Project Goal
